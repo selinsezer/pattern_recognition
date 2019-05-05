@@ -2,9 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-INPUT_PATH = os.path.dirname(os.getcwd()) + '/resources'
-OUTPUT_PATH = os.path.dirname(os.getcwd()) + '/results'
-
 
 def plotData2D(X, filename=None):
     # create a figure and its axes
@@ -50,7 +47,7 @@ if __name__ == "__main__":
     #######################################################################
     # define type of data to be read and read data from file whose path is defined as data_path
     dt = np.dtype([('w', np.float), ('h', np.float), ('g', np.str_, 1)])
-    data_path = INPUT_PATH + '/whData.dat'
+    data_path = 'whData.dat'
     data = np.loadtxt(data_path, dtype=dt, comments='#', delimiter=None)
 
     # read height, weight and gender information into 1D arrays if the point is not an outlier
@@ -60,8 +57,8 @@ if __name__ == "__main__":
 
     # now, plot weight vs. height by creating matrix X by stacking w and h
     X = np.vstack((ws, hs))
-    plotData2D(X, OUTPUT_PATH + '/plotWH.pdf')
+    plotData2D(X, 'plotWH.pdf')
 
     # next, let's plot height vs. weight
     Z = np.vstack((hs,ws))
-    plotData2D(Z, OUTPUT_PATH + '/plotHW.pdf')
+    plotData2D(Z, 'plotHW.pdf')
