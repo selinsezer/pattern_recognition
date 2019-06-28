@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 
+test_counter = 1
 
 def read_data():
     #   read X data
@@ -11,7 +12,6 @@ def read_data():
     #   read y data
     y_path = 'xor-y.csv'
     y = np.genfromtxt(y_path, delimiter=',')
-
     return X, y
 
 
@@ -42,23 +42,21 @@ def compute_delta_theta(x, y, w, theta):
     return 2 * sum(partial_der_theta(x_i, y_i, w, theta) for x_i, y_i in zip(x, y))
 
 
-def train_non_mon_neuron(X, y, epochs=50, theta_step=0.001, w_step=0.005):
-    #   randomly initialize w and theta
-    w = np.random.rand(1,2)[0]
-    theta = np.random.rand(1,1)[0]
-
+def train_non_mon_neuron(w_init, theta_init, X, y, epochs=50, theta_step=0.001, w_step=0.005):
+    w = w_init
+    theta = theta_init
     #   for a given number of times, repeat: calculate the delta w and delta theta, subtract from current w and theta
     for i in range(epochs):
         delta_w = compute_delta_w(X, y, w, theta)
         delta_theta = compute_delta_theta(X, y, w, theta)
-        w -= w_step * delta_w
-        theta -= theta_step * delta_theta
+        w = w - w_step * delta_w
+        theta = theta - theta_step * delta_theta
 
     #   return resulting w and theta
     return w, theta
 
 
-def plot_decision_regions(X, y, w, theta, resolution=0.02):
+def plot_decision_regions(X, y, w, theta, filename, resolution=0.02):
     #   setup marker generator and color map
     colors = ('sandybrown', 'cornflowerblue')
     cmap = ListedColormap(colors[:len(np.unique(y))])
@@ -89,10 +87,51 @@ def plot_decision_regions(X, y, w, theta, resolution=0.02):
     ax.scatter(x1s, x2s, color=color, alpha=0.5)
     #   plot decision region
     ax.contourf(xx1, xx2, Z, alpha=0.5, cmap=cmap, levels=1)
-    plt.show()
+    plt.savefig(filename, facecolor='w', edgecolor='w',
+                papertype=None, format='png', transparent=False,
+                bbox_inches='tight', pad_inches=0.1)
+    plt.close()
+
+def run_test_case(X, y, w_init, theta_init, theta_step=0.001, w_step=0.005):
+
+    #   define filename variables
+    theta_step_str = ",".join(str(theta_step).split("."))
+    w_step_str = ",".join(str(w_step).split("."))
+
+    #   define epochs
+    epochs = [0, 10, 50, 100, 200, 300, 400, 500]
+
+    global test_counter
+    #   calculate & plot results for different epochs with same step sizes & initial w and theta
+    for epoch in epochs:
+        print("Running test with theta step size = {}, w step size = {}, epoch={}".format(theta_step, w_step, epoch))
+        w, theta = train_non_mon_neuron(w_init, theta_init, X, y, epoch, theta_step, w_step)
+        filename = "plots/{}_theta={}_w={}_epoch={}.png".format(test_counter, theta_step_str, w_step_str, epoch)
+        plot_decision_regions(X, y, w, theta, filename)
+    test_counter += 1
 
 
 if __name__ == '__main__':
     X, y = read_data()
-    w, theta = train_non_mon_neuron(X, y, 50)
-    plot_decision_regions(X, y, w, theta)
+    #   randomly initialize w and theta
+    w_init = np.random.rand(1, 2)[0]
+    theta_init = np.random.rand(1, 1)[0]
+
+    # run test with given step sizes: theta_step=0.001, w_step=0.005
+    run_test_case(X, y, w_init, theta_init)
+
+    #     increasing the step sizes
+    # run test with theta_step=0.01, w_step=0.005
+    run_test_case(X, y, w_init, theta_init, theta_step=0.01)
+    # run test with theta_step=0.01, w_step=0.05
+    run_test_case(X, y, w_init, theta_init, theta_step=0.01, w_step=0.05)
+    # run test with theta_step=0.001, w_step=0.05
+    run_test_case(X, y, w_init, theta_init, w_step=0.05)
+
+    #      decreasing the step sizes
+    # run test with theta_step=0.0001, w_step=0.005
+    run_test_case(X, y, w_init, theta_init, theta_step=0.0001)
+    # run test with theta_step=0.0001, w_step=0.0005
+    run_test_case(X, y, w_init, theta_init, theta_step=0.0001, w_step=0.0005)
+    # run test with theta_step=0.001, w_step=0.0005
+    run_test_case(X, y, w_init, theta_init, w_step=0.0005)
