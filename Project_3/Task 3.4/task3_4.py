@@ -103,11 +103,13 @@ def run_test_case(X, y, w_init, theta_init, theta_step=0.001, w_step=0.005):
 
     global test_counter
     #   calculate & plot results for different epochs with same step sizes & initial w and theta
+    print("Running test with theta step size = {}, w step size = {}".format(theta_step, w_step))
     for epoch in epochs:
-        print("Running test with theta step size = {}, w step size = {}, epoch={}".format(theta_step, w_step, epoch))
         w, theta = train_non_mon_neuron(w_init, theta_init, X, y, epoch, theta_step, w_step)
+        print("Epoch value: {}, w: {}, theta: {}".format(epoch, w, theta))
         filename = "plots/{}_theta={}_w={}_epoch={}.png".format(test_counter, theta_step_str, w_step_str, epoch)
         plot_decision_regions(X, y, w, theta, filename)
+    print("---------------------------------------------------------")
     test_counter += 1
 
 
@@ -123,15 +125,16 @@ if __name__ == '__main__':
     #     increasing the step sizes
     # run test with theta_step=0.01, w_step=0.005
     run_test_case(X, y, w_init, theta_init, theta_step=0.01)
-    # run test with theta_step=0.01, w_step=0.05
-    run_test_case(X, y, w_init, theta_init, theta_step=0.01, w_step=0.05)
     # run test with theta_step=0.001, w_step=0.05
     run_test_case(X, y, w_init, theta_init, w_step=0.05)
+    # run test with theta_step=0.01, w_step=0.05
+    run_test_case(X, y, w_init, theta_init, theta_step=0.01, w_step=0.05)
+
 
     #      decreasing the step sizes
     # run test with theta_step=0.0001, w_step=0.005
     run_test_case(X, y, w_init, theta_init, theta_step=0.0001)
-    # run test with theta_step=0.0001, w_step=0.0005
-    run_test_case(X, y, w_init, theta_init, theta_step=0.0001, w_step=0.0005)
     # run test with theta_step=0.001, w_step=0.0005
     run_test_case(X, y, w_init, theta_init, w_step=0.0005)
+    # run test with theta_step=0.0001, w_step=0.0005
+    run_test_case(X, y, w_init, theta_init, theta_step=0.0001, w_step=0.0005)
