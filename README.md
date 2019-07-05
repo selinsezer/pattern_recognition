@@ -1,2 +1,8 @@
-# pattern_recognition_ss19
-Project Repository for the Pattern Recognition Lecture in Summer Semester '19
+Pattern Recognition summer semester 2019
+
+Authors:
+
+Selin Sezar
+Iftekhar Ahmed
+SM Farhad Ali
+Hassan Mosharrof
