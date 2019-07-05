@@ -50,7 +50,7 @@ def LDA(X, class_length, n_biggest_vector):
 if __name__ == "__main__":
 
     data_x = np.transpose(np.genfromtxt("data-dimred-X.csv", delimiter=','))
-    y_label = np.genfromtxt("data-dimred-y.csv")
+    y_label = np.genfromtxt("data-dimred-y.csv",delimiter='\n')
 
     class_length_array = np.array(
         [len(y_label[y_label == 1]), len(y_label[y_label == 2]),
