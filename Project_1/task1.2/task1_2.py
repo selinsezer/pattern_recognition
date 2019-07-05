@@ -4,9 +4,6 @@ import numpy as np
 import os
 from math import ceil, floor
 
-INPUT_PATH = os.path.dirname(os.getcwd()) + '/resources'
-OUTPUT_PATH = os.path.dirname(os.getcwd()) + '/results'
-
 
 def plotData(data, x, fitted_pdf, filename=None):
     # create a figure and its axes
@@ -38,22 +35,22 @@ def plotData(data, x, fitted_pdf, filename=None):
 
 if __name__ == "__main__":
     # define path of the data file, type of data to be read and read data from file
-    data_path = INPUT_PATH + '/whData.dat'
+    data_path = 'whData.dat'
     dt = np.dtype([('w', np.float), ('h', np.float), ('g', np.str_, 1)])
     data = np.loadtxt(data_path, dtype=dt, comments='#', delimiter=None)
 
-    # read height information into 1D array while eliminating the outliers and sort the array
-    heights = sorted(np.array([d[1] for d in data if d[1] > 0]))
+    # read height information into 1D array while eliminating the outliers
+    heights = np.array([d[1] for d in data if d[1] > 0])
 
     # calculate the mean and the standard deviation
     mean, standard_deviation = norm.fit(heights)
 
-    # create a range where the probability density will be defined
+    # create a range where the probability density will be calculated
     x = np.linspace(min(heights)-20, max(heights)+20, 100)
 
     # create the probability density function using the parameters we obtained above
     fitted_pdf = norm.pdf(x, loc=mean, scale=standard_deviation)
 
     # define the output path and plot the data
-    figure_path = OUTPUT_PATH + '/task1_2.pdf'
+    figure_path = 'task1_2.pdf'
     plotData(heights, x, fitted_pdf, figure_path)

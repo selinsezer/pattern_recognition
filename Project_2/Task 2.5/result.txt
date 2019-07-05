@@ -1,0 +1,9 @@
+Accuracy:
+k=1, 88.54%
+k=3, 89.58%
+k=5, 93.75%
+
+Run time: run k-NN 100 times on the test dataset and take the average of time
+k=1, 0.0105 s
+k=3, 0.0134 s
+k=5, 0.0152 s
